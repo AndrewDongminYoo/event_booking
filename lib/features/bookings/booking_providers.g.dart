@@ -13,8 +13,8 @@ part of 'booking_providers.dart';
 const sharedPreferencesProvider = SharedPreferencesProvider._();
 
 final class SharedPreferencesProvider
-    extends $FunctionalProvider<AsyncValue<SharedPreferences>, SharedPreferences, FutureOr<SharedPreferences>>
-    with $FutureModifier<SharedPreferences>, $FutureProvider<SharedPreferences> {
+    extends $FunctionalProvider<SharedPreferences, SharedPreferences, SharedPreferences>
+    with $Provider<SharedPreferences> {
   const SharedPreferencesProvider._()
     : super(
         from: null,
@@ -31,17 +31,25 @@ final class SharedPreferencesProvider
 
   @$internal
   @override
-  $FutureProviderElement<SharedPreferences> $createElement(
+  $ProviderElement<SharedPreferences> $createElement(
     $ProviderPointer pointer,
-  ) => $FutureProviderElement(pointer);
+  ) => $ProviderElement(pointer);
 
   @override
-  FutureOr<SharedPreferences> create(Ref ref) {
+  SharedPreferences create(Ref ref) {
     return sharedPreferences(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(SharedPreferences value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<SharedPreferences>(value),
+    );
   }
 }
 
-String _$sharedPreferencesHash() => r'822246b57cce9703c8c0e7a289b80c97a085a8b8';
+String _$sharedPreferencesHash() => r'2d5264fa99716764e97371d9b5d72fa690f3009c';
 
 @ProviderFor(bookingStorage)
 const bookingStorageProvider = BookingStorageProvider._();
@@ -80,7 +88,7 @@ final class BookingStorageProvider extends $FunctionalProvider<BookingStorage, B
   }
 }
 
-String _$bookingStorageHash() => r'71726a4f0b3285b49c2b7f3eb07ebf240fd09921';
+String _$bookingStorageHash() => r'dfe7ce078fe46c74eca6640039747408117a0764';
 
 @ProviderFor(bookingRepository)
 const bookingRepositoryProvider = BookingRepositoryProvider._();

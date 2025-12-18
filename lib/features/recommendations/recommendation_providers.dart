@@ -19,8 +19,8 @@ class ViewedEvents extends _$ViewedEvents {
 
   @override
   List<BigInt> build() {
-    ref.listen<AsyncValue<SharedPreferences>>(sharedPreferencesProvider, (previous, next) {
-      next.whenData(_restoreFromPrefs);
+    ref.listen(sharedPreferencesProvider, (previous, next) {
+      _restoreFromPrefs(next);
     });
     return <BigInt>[];
   }
@@ -43,7 +43,7 @@ class ViewedEvents extends _$ViewedEvents {
 
   Future<void> _persist() async {
     try {
-      final prefs = await ref.read(sharedPreferencesProvider.future);
+      final prefs = ref.read(sharedPreferencesProvider);
       await prefs.setStringList(
         _prefsKey,
         state.map((id) => id.toString()).toList(growable: false),

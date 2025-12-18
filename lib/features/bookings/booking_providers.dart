@@ -15,20 +15,16 @@ import 'package:event_booking/features/events/models/event.dart';
 part 'booking_providers.g.dart';
 
 @riverpod
-FutureOr<SharedPreferences> sharedPreferences(Ref ref) {
-  return SharedPreferences.getInstance();
+SharedPreferences sharedPreferences(Ref ref) {
+  throw UnimplementedError(
+    'SharedPreferences provider must be overridden with a real instance.',
+  );
 }
 
 @riverpod
 BookingStorage bookingStorage(Ref ref) {
   final prefs = ref.watch(sharedPreferencesProvider);
-  if (prefs.value != null) {
-    return SharedPreferencesBookingStorage(prefs.value!);
-  } else {
-    throw UnimplementedError(
-      'BookingStorage provider cannot be used before SharedPreferences is ready.',
-    );
-  }
+  return SharedPreferencesBookingStorage(prefs);
 }
 
 @riverpod
