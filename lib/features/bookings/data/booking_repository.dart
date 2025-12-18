@@ -9,6 +9,12 @@ class BookingRepository {
 
   List<Booking> get bookings => _bookings.values.toList(growable: false)..sort(_byMostRecent);
 
+  void seedBookings(Iterable<Booking> bookings) {
+    for (final booking in bookings) {
+      _bookings[booking.eventId] = booking;
+    }
+  }
+
   bool reserve(Event event) {
     if (_bookings.containsKey(event.id)) return false;
     _bookings[event.id] = Booking(

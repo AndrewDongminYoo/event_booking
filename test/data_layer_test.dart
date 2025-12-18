@@ -4,14 +4,24 @@ import 'package:flutter_test/flutter_test.dart';
 
 // 🌎 Project imports:
 import 'package:event_booking/features/bookings/booking_providers.dart';
+import 'package:event_booking/features/bookings/data/booking_storage.dart';
 import 'package:event_booking/features/events/event_providers.dart';
 import 'package:event_booking/features/recommendations/recommendation_providers.dart';
 
 void main() {
-  test('booking controller prevents duplicate reservations', () {
-    final container = ProviderContainer();
-    addTearDown(container.dispose);
+  late ProviderContainer container;
+  setUp(() {
+    container = ProviderContainer(
+      overrides: [
+        bookingStorageProvider.overrideWithValue(InMemoryBookingStorage()),
+      ],
+    );
+  });
+  tearDown(() {
+    container.dispose();
+  });
 
+  test('booking controller prevents duplicate reservations', () {
     final events = container.read(eventsProvider);
     final bookingController = container.read(bookingsProvider.notifier);
 
@@ -24,9 +34,6 @@ void main() {
   });
 
   test('search filters events by query', () {
-    final container = ProviderContainer();
-    addTearDown(container.dispose);
-
     container.read(searchQueryProvider.notifier).state = 'Seoul';
     final filtered = container.read(filteredEventsProvider);
 
@@ -35,9 +42,6 @@ void main() {
   });
 
   test('recommendations favor recently viewed artist', () {
-    final container = ProviderContainer();
-    addTearDown(container.dispose);
-
     final events = container.read(eventsProvider);
     final lumi = events.firstWhere((e) => e.artist == 'Lumi');
 
