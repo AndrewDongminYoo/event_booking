@@ -1,10 +1,12 @@
-name: event_booking
+# cspell:ignore dorny,amannn,subosito
+name: Flutter CI/CD
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 permissions: read-all
+
 on:
   push:
     branches:
@@ -15,16 +17,82 @@ on:
 
 jobs:
   semantic-pull-request:
-    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/semantic_pull_request.yml@v1
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🤖 Ensure Commit is Semantic
+        if: github.event_name == 'pull_request'
+        uses: amannn/action-semantic-pull-request@v6.1.1
+        with:
+          validateSingleCommit: false
+          ignoreLabels: |
+            bot
+            ignore-semantic-pull-request
+          wip: false
 
   build:
-    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
-    with:
-      flutter_version: 3.35.x
+    defaults:
+      run:
+        working-directory: .
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📚 Git Checkout with Submodules
+        uses: actions/checkout@v5
+
+      - name: 🐦 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+          cache-key: flutter-:os:-:channel:-:version:-:arch:-:hash:-${{ hashFiles('**/pubspec.lock') }}
+
+      - name: 📦 Install Dependencies
+        run: |
+          flutter pub global activate very_good_cli
+          very_good packages get --recursive --ignore="!*"
+
+      - name: ✨ Check Formatting
+        run: |
+          git restore lib/l10n/arb/app_localizations*.dart
+          dart format --line-length 120 --set-exit-if-changed lib test
+
+      - name: 🕵️ Analyze
+        run: flutter analyze lib test
+
+      - name: 🧪 Run Tests
+        run: very_good test -j 4 --no-optimization --coverage --test-randomize-ordering-seed random
+
+      - name: 🎯 Filter Coverage Files
+        run: |
+          sudo apt-get update && sudo apt-get install -y lcov
+          lcov --remove coverage/lcov.info "**/*.g.dart" "**/l10n/arb/**.dart" -o coverage/lcov_filtered.info --ignore-errors unused
+
+      - name: 📈 Upload filtered coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: coverage/lcov_filtered.info
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: true
+          verbose: true
 
   spell-check:
-    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/spell_check.yml@v1
-    with:
-      includes: |
-        **/*.md
-      modified_files_only: false
+    defaults:
+      run:
+        working-directory: .
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📚 Git Checkout
+        uses: actions/checkout@v5
+
+      - name: 🪄 Spell Check
+        uses: streetsidesoftware/cspell-action@v7.2.1
+        with:
+          incremental_files_only: false
+          root: .
+          verbose: false
