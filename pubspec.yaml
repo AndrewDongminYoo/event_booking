@@ -25,6 +25,7 @@ dependencies:
 
 dev_dependencies:
   build_runner: ^2.10.4
+  flutter_gen_runner: ^5.12.0
   flutter_test:
     sdk: flutter
   import_sorter: ^4.6.0
@@ -35,6 +36,44 @@ dev_dependencies:
 flutter:
   generate: true
   uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/fonts/
+
+  fonts:
+    - family: Pretendard
+      # https://cactus.tistory.com/306
+      fonts:
+        - asset: assets/fonts/design/Pretendard-Thin.ttf
+          weight: 100
+        - asset: assets/fonts/design/Pretendard-ExtraLight.ttf
+          weight: 200
+        - asset: assets/fonts/design/Pretendard-Light.ttf
+          weight: 300
+        - asset: assets/fonts/design/Pretendard-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/design/Pretendard-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/design/Pretendard-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/design/Pretendard-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/design/Pretendard-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/design/Pretendard-Black.ttf
+          weight: 900
+
+# https://pub.dev/packages/flutter_gen_runner
+flutter_gen:
+  output: lib/gen/ # Optional (default: lib/gen/)
+  line_length: 120 # Optional (default: 80)
+
+  # Optional
+  integrations:
+    flutter_svg: true
+    image: true
+    lottie: true
 
 # https://github.com/frencojobs/derry
 # `dart pub global activate derry`
