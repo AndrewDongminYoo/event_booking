@@ -59,6 +59,7 @@ class Bookings extends _$Bookings {
     if (created) {
       state = repository.bookings;
       _persist();
+      _refreshEventCaches();
     } else {
       // rollback seat in case of duplicate booking
       eventsRepo.releaseSeat(event.id);
@@ -74,6 +75,7 @@ class Bookings extends _$Bookings {
       eventsRepo.releaseSeat(eventId);
       state = repository.bookings;
       _persist();
+      _refreshEventCaches();
     }
     return removed;
   }
@@ -87,5 +89,11 @@ class Bookings extends _$Bookings {
   void _persist() {
     final storage = ref.read(bookingStorageProvider);
     unawaited(storage.save(state));
+  }
+
+  void _refreshEventCaches() {
+    ref.invalidate(eventsProvider);
+    ref.invalidate(filteredEventsProvider);
+    ref.invalidate(eventWithBookingStatusProvider);
   }
 }

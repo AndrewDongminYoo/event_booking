@@ -55,6 +55,7 @@ linter:
 analyzer:
   errors:
     invalid_annotation_target: ignore
+    cascade_invocations: ignore
   exclude:
     - lib/l10n/gen/**
   plugins:

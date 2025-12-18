@@ -1,6 +1,7 @@
 // 📦 Package imports:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // 🌎 Project imports:
 import 'package:event_booking/features/bookings/booking_providers.dart';
@@ -9,6 +10,9 @@ import 'package:event_booking/features/events/event_providers.dart';
 import 'package:event_booking/features/recommendations/recommendation_providers.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences.setMockInitialValues({});
+
   late ProviderContainer container;
   setUp(() {
     container = ProviderContainer(

@@ -1,5 +1,9 @@
+// 🎯 Dart imports:
+import 'dart:async';
+
 // 📦 Package imports:
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // 🌎 Project imports:
 import 'package:event_booking/features/bookings/booking_providers.dart';
@@ -11,8 +15,13 @@ part 'recommendation_providers.g.dart';
 @Riverpod(keepAlive: true)
 /// Tracks viewed event ids (most recent first).
 class ViewedEvents extends _$ViewedEvents {
+  static const _prefsKey = 'viewed_events_v1';
+
   @override
   List<BigInt> build() {
+    ref.listen<AsyncValue<SharedPreferences>>(sharedPreferencesProvider, (previous, next) {
+      next.whenData(_restoreFromPrefs);
+    });
     return <BigInt>[];
   }
 
@@ -20,6 +29,28 @@ class ViewedEvents extends _$ViewedEvents {
     // Move to front, keep list unique and short.
     final next = <BigInt>[eventId, ...state.where((id) => id != eventId)];
     state = next.take(10).toList(growable: false);
+    unawaited(_persist());
+  }
+
+  void _restoreFromPrefs(SharedPreferences prefs) {
+    final stored = prefs.getStringList(_prefsKey);
+    if (stored == null || stored.isEmpty) return;
+    final ids = stored.map(BigInt.tryParse).whereType<BigInt>().toList(growable: false);
+    if (ids.isNotEmpty) {
+      state = ids;
+    }
+  }
+
+  Future<void> _persist() async {
+    try {
+      final prefs = await ref.read(sharedPreferencesProvider.future);
+      await prefs.setStringList(
+        _prefsKey,
+        state.map((id) => id.toString()).toList(growable: false),
+      );
+    } catch (_) {
+      // If SharedPreferences is unavailable (e.g. widget tests), skip persistence.
+    }
   }
 }
 
@@ -35,7 +66,7 @@ List<Event> recommendations(Ref ref) {
   // Simple heuristic:
   // - Prefer same artist as last viewed/booked (+3)
   // - Prefer fanmeet/fansign tags (+1)
-  // - Deprioritize already booked events (score = -inf -> excluded)
+  // - De-prioritize already booked events (score = -inf -> excluded)
   Event? lastViewed;
   if (viewedIds.isNotEmpty) {
     lastViewed = events.firstWhere(

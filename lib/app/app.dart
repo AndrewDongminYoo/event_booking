@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
+import 'package:event_booking/app/view/shell.dart';
 import 'package:event_booking/l10n/l10n.dart';
 
 class App extends StatelessWidget {
@@ -35,6 +36,8 @@ class App extends StatelessWidget {
       ),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
+      debugShowCheckedModeBanner: false,
+      home: const EventShell(),
     );
   }
 }

@@ -43,7 +43,7 @@ final class ViewedEventsProvider extends $NotifierProvider<ViewedEvents, List<Bi
   }
 }
 
-String _$viewedEventsHash() => r'd86f775c95cae91d673ca818f253395100d525c1';
+String _$viewedEventsHash() => r'b17f900712ecd9703df818e1f6d612a2d4d62760';
 
 /// Tracks viewed event ids (most recent first).
 
