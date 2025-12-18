@@ -38,7 +38,7 @@ final seedEvents = <Event>[
     venue: 'Shibuya Stream Hall, Tokyo',
     tags: const ['fansign', 'limited'],
     totalSeats: 500,
-    bookedSeats: 480,
+    bookedSeats: 500,
     imageUrl: '$_kImageBase/neon9_fansign.jpg',
     description: 'Limited-seat autograph session with surprise unit stage.',
   ),

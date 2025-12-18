@@ -52,4 +52,17 @@ void main() {
     expect(recommended, isNotEmpty);
     expect(recommended.first.artist, lumi.artist);
   });
+
+  test('reservation fails when seats are sold out', () {
+    final events = container.read(eventsProvider);
+    final soldOut = events.firstWhere(
+      (e) => e.bookedSeats >= e.totalSeats,
+      orElse: () => events.first,
+    );
+
+    final bookingController = container.read(bookingsProvider.notifier);
+    final reserved = bookingController.reserve(soldOut);
+
+    expect(reserved, isFalse);
+  });
 }

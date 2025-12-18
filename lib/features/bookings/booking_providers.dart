@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:event_booking/features/bookings/data/booking_repository.dart';
 import 'package:event_booking/features/bookings/data/booking_storage.dart';
 import 'package:event_booking/features/bookings/models/booking.dart';
+import 'package:event_booking/features/events/event_providers.dart';
 import 'package:event_booking/features/events/models/event.dart';
 
 part 'booking_providers.g.dart';
@@ -50,20 +51,27 @@ class Bookings extends _$Bookings {
 
   bool reserve(Event event) {
     final repository = ref.read(bookingRepositoryProvider);
-    final _ = ref.read(bookingStorageProvider);
+    final eventsRepo = ref.watch(eventRepositoryProvider);
+    if (!eventsRepo.tryReserveSeat(event.id)) {
+      return false;
+    }
     final created = repository.reserve(event);
     if (created) {
       state = repository.bookings;
       _persist();
+    } else {
+      // rollback seat in case of duplicate booking
+      eventsRepo.releaseSeat(event.id);
     }
     return created;
   }
 
   bool cancel(BigInt eventId) {
     final repository = ref.read(bookingRepositoryProvider);
-    final _ = ref.read(bookingStorageProvider);
+    final eventsRepo = ref.watch(eventRepositoryProvider);
     final removed = repository.cancel(eventId);
     if (removed) {
+      eventsRepo.releaseSeat(eventId);
       state = repository.bookings;
       _persist();
     }
