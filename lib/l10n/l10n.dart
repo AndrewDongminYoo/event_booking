@@ -1,5 +1,8 @@
-import 'package:event_booking/l10n/gen/app_localizations.dart';
+// 🐦 Flutter imports:
 import 'package:flutter/widgets.dart';
+
+// 🌎 Project imports:
+import 'package:event_booking/l10n/gen/app_localizations.dart';
 
 export 'package:event_booking/l10n/gen/app_localizations.dart';
 
