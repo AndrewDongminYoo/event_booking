@@ -41,13 +41,10 @@ class BookingsPage extends ConsumerWidget {
                 separatorBuilder: (_, _) => const SizedBox(height: 12),
                 itemBuilder: (_, index) {
                   final event = bookedEvents[index];
-                  return SizedBox(
-                    height: 220,
-                    child: EventCard(
-                      event: event,
-                      isBooked: true,
-                      onTap: () => _showEventDialog(context, event),
-                    ),
+                  return EventCard(
+                    event: event,
+                    isBooked: true,
+                    onTap: () => _showEventDialog(context, event),
                   );
                 },
               ),

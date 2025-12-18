@@ -35,10 +35,10 @@ class HomePage extends ConsumerWidget {
             : GridView.builder(
                 itemCount: entries.length,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: MediaQuery.of(context).size.width > 800 ? 3 : 2,
+                  crossAxisCount: MediaQuery.of(context).size.width > 800 ? 2 : 1,
                   crossAxisSpacing: 12,
                   mainAxisSpacing: 12,
-                  childAspectRatio: 3 / 4,
+                  childAspectRatio: 7 / 10,
                 ),
                 itemBuilder: (_, index) {
                   final entry = entries[index];
