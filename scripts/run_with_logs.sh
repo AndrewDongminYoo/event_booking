@@ -75,13 +75,14 @@ mkdir -p "${TMP_DIR}"
 STDOUT_LOG="${TMP_DIR}/stdout.log"
 STDERR_LOG="${TMP_DIR}/stderr.log"
 META_LOG="${TMP_DIR}/meta.txt"
+GIT_SHA=$(git rev-parse HEAD 2>/dev/null || echo 'HEAD')
 
 {
 	echo "TARGET=${TARGET}"
 	echo "TIMESTAMP=${TS}"
-	echo "PWD=$(pwd)"
+	echo "PWD=$(pwd || true)"
 	echo "COMMAND=${SAFE_CMD[*]}"
-	echo "GIT_SHA=$(git rev-parse HEAD 2>/dev/null || echo 'unknown')"
+	echo "GIT_SHA=${GIT_SHA}"
 } >"${META_LOG}"
 
 echo "[run_with_logs] COMMAND: ${TARGET}"

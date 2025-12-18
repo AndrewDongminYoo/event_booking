@@ -18,6 +18,8 @@ runtimes:
     - python@3.10.8
 # This is the section where you manage your linters. (https://docs.trunk.io/check/configuration)
 lint:
+  disabled:
+    - dart
   ignore:
     - linters:
         - osv-scanner
@@ -32,7 +34,6 @@ lint:
     - shfmt@3.6.0
     - actionlint@1.7.9
     - checkov@3.2.495
-    - dart@3.9.2
     - git-diff-check
     - ktlint@1.8.0
     - markdownlint@0.47.0

@@ -1,6 +1,6 @@
 # **App Name**: K-Wave Connect
 
-## Core Features:
+## Core Features
 
 - Event Browsing: Browse upcoming K-pop events with details on artists, dates, and venues.
 - Event Registration: Allow users to register for desired events through the platform.
@@ -8,7 +8,7 @@
 - Event Search/Filter: Enable users to search and filter events by artist, date, venue, or other criteria.
 - Personalized Recommendation: Suggest upcoming K-pop concerts that user might enjoy based on the viewing history. It's able to reason which events a user may like to see. Powered by a tool.
 
-## Style Guidelines:
+## Style Guidelines
 
 - Primary color: Vibrant pink (#FF69B4) to represent the energetic and lively nature of K-pop.
 - Background color: Light silver (#D3D3D3) to provide a sleek and modern backdrop.
