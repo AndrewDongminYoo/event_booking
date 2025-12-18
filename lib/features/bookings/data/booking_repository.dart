@@ -5,7 +5,7 @@ import 'package:event_booking/features/bookings/models/booking.dart';
 import 'package:event_booking/features/events/models/event.dart';
 
 class BookingRepository {
-  final Map<String, Booking> _bookings = {};
+  final Map<BigInt, Booking> _bookings = {};
 
   List<Booking> get bookings => _bookings.values.toList(growable: false)..sort(_byMostRecent);
 
@@ -24,9 +24,9 @@ class BookingRepository {
     return true;
   }
 
-  bool cancel(String eventId) => _bookings.remove(eventId) != null;
+  bool cancel(BigInt eventId) => _bookings.remove(eventId) != null;
 
-  bool isBooked(String eventId) => _bookings.containsKey(eventId);
+  bool isBooked(BigInt eventId) => _bookings.containsKey(eventId);
 
   static int _byMostRecent(Booking a, Booking b) => b.bookedAt.compareTo(a.bookedAt);
 }

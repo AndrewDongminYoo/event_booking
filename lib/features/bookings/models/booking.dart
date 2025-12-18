@@ -10,6 +10,6 @@ class Booking {
     required this.bookedAt,
   });
 
-  final String eventId;
+  final BigInt eventId;
   final DateTime bookedAt;
 }

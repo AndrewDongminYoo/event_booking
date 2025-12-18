@@ -59,7 +59,7 @@ class Bookings extends _$Bookings {
     return created;
   }
 
-  bool cancel(String eventId) {
+  bool cancel(BigInt eventId) {
     final repository = ref.read(bookingRepositoryProvider);
     final _ = ref.read(bookingStorageProvider);
     final removed = repository.cancel(eventId);
@@ -70,7 +70,7 @@ class Bookings extends _$Bookings {
     return removed;
   }
 
-  bool isBooked(String eventId) {
+  bool isBooked(BigInt eventId) {
     final repository = ref.read(bookingRepositoryProvider);
     final _ = ref.read(bookingStorageProvider);
     return repository.isBooked(eventId);

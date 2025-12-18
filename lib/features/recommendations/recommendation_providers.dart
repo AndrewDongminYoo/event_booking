@@ -1,29 +1,31 @@
 // 📦 Package imports:
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/legacy.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 // 🌎 Project imports:
 import 'package:event_booking/features/bookings/booking_providers.dart';
 import 'package:event_booking/features/events/event_providers.dart';
 import 'package:event_booking/features/events/models/event.dart';
 
+part 'recommendation_providers.g.dart';
+
+@Riverpod(keepAlive: true)
 /// Tracks viewed event ids (most recent first).
-final viewedEventsProvider = StateNotifierProvider<ViewedEventsNotifier, List<String>>((ref) {
-  return ViewedEventsNotifier();
-});
+class ViewedEvents extends _$ViewedEvents {
+  @override
+  List<BigInt> build() {
+    return <BigInt>[];
+  }
 
-class ViewedEventsNotifier extends StateNotifier<List<String>> {
-  ViewedEventsNotifier() : super(const []);
-
-  void trackView(String eventId) {
+  void trackView(BigInt eventId) {
     // Move to front, keep list unique and short.
-    final next = <String>[eventId, ...state.where((id) => id != eventId)];
+    final next = <BigInt>[eventId, ...state.where((id) => id != eventId)];
     state = next.take(10).toList(growable: false);
   }
 }
 
+@Riverpod(keepAlive: true)
 /// Produces a ranked list of recommended events based on recent views and bookings.
-final recommendationsProvider = Provider<List<Event>>((ref) {
+List<Event> recommendations(Ref ref) {
   final events = ref.watch(eventsProvider);
   final bookings = ref.watch(bookingsProvider);
   final viewedIds = ref.watch(viewedEventsProvider);
@@ -66,4 +68,4 @@ final recommendationsProvider = Provider<List<Event>>((ref) {
     });
 
   return ranked.take(5).toList(growable: false);
-});
+}

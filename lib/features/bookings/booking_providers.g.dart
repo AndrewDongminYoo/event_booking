@@ -155,7 +155,7 @@ final class BookingsProvider extends $NotifierProvider<Bookings, List<Booking>> 
   }
 }
 
-String _$bookingsHash() => r'b7c5a8e2dbfcf60389b2dfa4397d39d0f000872f';
+String _$bookingsHash() => r'f34a331d4b5f23eeb0594ff5c67f2b77c5c5e46b';
 
 abstract class _$Bookings extends $Notifier<List<Booking>> {
   List<Booking> build();

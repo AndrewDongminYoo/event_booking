@@ -5,11 +5,18 @@ import 'package:event_booking/features/events/data/events_seed.dart';
 import 'package:event_booking/features/events/models/event.dart';
 
 class EventRepository {
-  EventRepository({List<Event>? initialEvents}) : _events = List<Event>.unmodifiable(initialEvents ?? seedEvents);
+  EventRepository({List<Event>? initialEvents}) : _events = List<Event>.unmodifiable(initialEvents ?? seedEvents) {
+    for (final event in _events) {
+      _booked[event.id] = event.bookedSeats;
+      _total[event.id] = event.totalSeats;
+    }
+  }
 
   final List<Event> _events;
+  final Map<BigInt, int> _booked = {};
+  final Map<BigInt, int> _total = {};
 
-  List<Event> get events => _events;
+  List<Event> get events => _events.map(_materialize).toList(growable: false);
 
   List<Event> search({
     String? query,
@@ -33,8 +40,36 @@ class EventRepository {
 
           return matchesQuery && matchesArtist && matchesFrom && matchesTo;
         })
+        .map(_materialize)
         .toList(growable: false);
   }
 
-  Event? byId(String id) => _events.cast<Event?>().firstWhere((e) => e?.id == id, orElse: () => null);
+  Event? byId(BigInt id) {
+    final event = _events.cast<Event?>().firstWhere(
+      (e) => e?.id == id,
+      orElse: () => null,
+    );
+    return event == null ? null : _materialize(event);
+  }
+
+  bool tryReserveSeat(BigInt eventId) {
+    final currentBooked = _booked[eventId] ?? 0;
+    final total = _total[eventId] ?? 0;
+    if (currentBooked >= total) return false;
+    _booked[eventId] = currentBooked + 1;
+    return true;
+  }
+
+  bool releaseSeat(BigInt eventId) {
+    final currentBooked = _booked[eventId];
+    if (currentBooked == null || currentBooked == 0) return false;
+    _booked[eventId] = currentBooked - 1;
+    return true;
+  }
+
+  Event _materialize(Event base) {
+    final booked = _booked[base.id] ?? base.bookedSeats;
+    final total = _total[base.id] ?? base.totalSeats;
+    return base.copyWith(bookedSeats: booked, totalSeats: total);
+  }
 }
