@@ -22,6 +22,7 @@ K-Wave Connect is a K-pop event discovery and booking app. The current POC focus
 - Event detail view with a single-step "Reserve" action.
 - Minimal booking confirmation and a "My Bookings" list stored locally.
 - Simple rule-based recommendations derived from viewed/selected artists.
+- Seat availability per event (total/booked/left) with sold-out handling in UI.
 - Uses the K-Wave Connect design palette: primary #FF69B4, accent #FF1493, background #D3D3D3, Pretendard font, K-pop themed icons, grid-based layout, and subtle transitions.
 
 ## Getting Started 🚀

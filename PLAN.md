@@ -24,19 +24,19 @@
 ## 작업 항목
 
 1. 기본 도메인/모델 정의
-   - `Event`(id, artist, title, date, venue, tags, image/icon)
-   - `Booking`(eventId, bookedAt)
-   - 목업 데이터 생성: 5~8개 K-POP 팬미팅/콘서트
+   - `Event`(id: BigInt, artist, title, date, venue, tags, image/icon, totalSeats, bookedSeats)
+   - `Booking`(eventId: BigInt, bookedAt)
+   - 목업 데이터 생성: 5~8개 K-POP 팬미팅/콘서트 (좌석 정보 포함)
 
 2. 앱 구조 뼈대
    - 홈 탭: 이벤트 그리드 + 검색/필터 + 추천 섹션
-   - 상세 화면: 이벤트 설명, 날짜/장소, 버튼 `Reserve`
+   - 상세 화면: 이벤트 설명, 날짜/장소, 버튼 `Reserve`, 좌석 잔여 수(총/예매됨/남음) 표시
    - 마이 페이지/탭: 예약 목록(`My Bookings`)
    - 단순 레이아웃 전환 애니메이션 적용
 
 3. 상태 & 로직
-   - Bloc: `EventCubit/Bloc`(목록/필터), `BookingCubit/Bloc`(예약/취소), `RecommendationCubit`(최근 조회/예약 기반 추천)
-   - 예약 흐름: 버튼 탭 -> 상태 업데이트 -> 스낵바/다이얼로그 확인 -> My Bookings 반영
+   - Riverpod: `eventsProvider`(검색/필터), `bookingsProvider`(+SharedPrefs 지속), `recommendationsProvider`, `viewedEventsProvider`
+   - 예약 흐름: 좌석 가능 여부 체크 -> 버튼 탭 -> 상태 업데이트 및 좌석 수 반영 -> 스낵바/다이얼로그 확인 -> My Bookings 반영
 
 4. 저장소 레이어 (옵션적 단기 구현)
    - In-memory repository 기본 구현
