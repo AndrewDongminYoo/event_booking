@@ -9,12 +9,29 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const primary = Color(0xFFFF69B4); // vibrant pink
+    const accent = Color(0xFFFF1493); // deep pink
+    const background = Color(0xFFD3D3D3); // light silver
+
     return MaterialApp(
       theme: ThemeData(
-        appBarTheme: AppBarTheme(
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        ),
         useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: primary,
+          primary: primary,
+          secondary: accent,
+          surface: background,
+        ),
+        scaffoldBackgroundColor: background,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: primary,
+          foregroundColor: Colors.white,
+        ),
+        snackBarTheme: const SnackBarThemeData(
+          backgroundColor: accent,
+          contentTextStyle: TextStyle(color: Colors.white),
+        ),
+        fontFamily: 'Pretendard',
       ),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,

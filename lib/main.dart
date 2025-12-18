@@ -43,6 +43,7 @@ final class SessionLoggingObserver extends ProviderObserver {
     if (!kReleaseMode) {
       final provider = context.provider;
       final newState = newValue is AsyncValue ? newValue.value : newValue;
+      // ignore: avoid_print
       print({
         'providers': provider.name ?? provider.runtimeType,
         'statement': ?newState,

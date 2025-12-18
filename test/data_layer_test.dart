@@ -1,0 +1,51 @@
+// 📦 Package imports:
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+// 🌎 Project imports:
+import 'package:event_booking/features/bookings/booking_providers.dart';
+import 'package:event_booking/features/events/event_providers.dart';
+import 'package:event_booking/features/recommendations/recommendation_providers.dart';
+
+void main() {
+  test('booking controller prevents duplicate reservations', () {
+    final container = ProviderContainer();
+    addTearDown(container.dispose);
+
+    final events = container.read(eventsProvider);
+    final bookingController = container.read(bookingsProvider.notifier);
+
+    final first = bookingController.reserve(events.first);
+    final duplicate = bookingController.reserve(events.first);
+
+    expect(first, isTrue);
+    expect(duplicate, isFalse, reason: 'Should not allow duplicate bookings');
+    expect(container.read(bookingsProvider).length, 1);
+  });
+
+  test('search filters events by query', () {
+    final container = ProviderContainer();
+    addTearDown(container.dispose);
+
+    container.read(searchQueryProvider.notifier).state = 'Seoul';
+    final filtered = container.read(filteredEventsProvider);
+
+    expect(filtered, isNotEmpty);
+    expect(filtered.every((e) => e.venue.contains('Seoul')), isTrue);
+  });
+
+  test('recommendations favor recently viewed artist', () {
+    final container = ProviderContainer();
+    addTearDown(container.dispose);
+
+    final events = container.read(eventsProvider);
+    final lumi = events.firstWhere((e) => e.artist == 'Lumi');
+
+    container.read(viewedEventsProvider.notifier).trackView(lumi.id);
+
+    final recommended = container.read(recommendationsProvider);
+
+    expect(recommended, isNotEmpty);
+    expect(recommended.first.artist, lumi.artist);
+  });
+}
