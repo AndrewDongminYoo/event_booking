@@ -30,13 +30,13 @@ This project ships with three flavors: development, staging, and production. Run
 
 ```sh
 # Development
-flutter run --flavor development --target lib/main_development.dart
+flutter run --flavor development
 
 # Staging
-flutter run --flavor staging --target lib/main_staging.dart
+flutter run --flavor staging
 
 # Production
-flutter run --flavor production --target lib/main_production.dart
+flutter run --flavor production
 ```
 
 K-Wave Connect targets iOS, Android, Web, macOS, and Windows.
