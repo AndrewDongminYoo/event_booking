@@ -18,6 +18,15 @@ runtimes:
     - python@3.10.8
 # This is the section where you manage your linters. (https://docs.trunk.io/check/configuration)
 lint:
+  ignore:
+    - linters:
+        - osv-scanner
+      paths:
+        - "**/Podfile.lock"
+    - linters:
+        - markdownlint
+      paths:
+        - .github/**/*.md
   enabled:
     - shellcheck@0.11.0
     - shfmt@3.6.0
