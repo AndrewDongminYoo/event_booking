@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 
 // 🌎 Project imports:
 import 'package:event_booking/features/events/models/event.dart';
+import 'package:event_booking/widgets/custom_image_view.dart';
 
 class EventCard extends StatelessWidget {
   const EventCard({
@@ -47,10 +48,10 @@ class EventCard extends StatelessWidget {
               child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  Image.network(
-                    event.imageUrl,
+                  CustomImageView(
+                    imagePath: event.imageUrl,
+                    semanticLabel: event.tags.join(' '),
                     fit: BoxFit.cover,
-                    errorBuilder: (_, _, _) => Container(color: Colors.grey.shade300),
                   ),
                   Positioned(
                     top: 12,

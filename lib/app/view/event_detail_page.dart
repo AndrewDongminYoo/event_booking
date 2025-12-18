@@ -15,6 +15,7 @@ import 'package:event_booking/features/bookings/booking_providers.dart';
 import 'package:event_booking/features/events/event_providers.dart';
 import 'package:event_booking/features/events/models/event.dart';
 import 'package:event_booking/features/recommendations/recommendation_providers.dart';
+import 'package:event_booking/widgets/custom_image_view.dart';
 
 class EventDetailPage extends ConsumerStatefulWidget {
   const EventDetailPage({required this.eventId, super.key});
@@ -69,11 +70,11 @@ class _EventDetailPageState extends ConsumerState<EventDetailPage> {
               children: [
                 AspectRatio(
                   aspectRatio: 16 / 9,
-                  child: Image.network(
-                    event.imageUrl,
+                  child: CustomImageView(
+                    imagePath: event.imageUrl,
+                    semanticLabel: event.tags.join(' '),
                     width: double.infinity,
                     fit: BoxFit.cover,
-                    errorBuilder: (_, _, _) => Container(color: Colors.grey.shade300),
                   ),
                 ),
                 Positioned(
