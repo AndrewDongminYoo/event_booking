@@ -67,7 +67,7 @@ class BookingsPage extends ConsumerWidget {
             children: [
               Text(event.artist),
               const SizedBox(height: 8),
-              Text('Seats left: ${event.seatsLeft}'),
+              Text('Seats left: ${event.availableSeats}'),
             ],
           ),
           actions: [

@@ -95,7 +95,7 @@ List<Event> recommendations(Ref ref) {
     ..sort((a, b) {
       final scoreDiff = score(b) - score(a);
       if (scoreDiff != 0) return scoreDiff;
-      return a.dateTime.compareTo(b.dateTime);
+      return a.eventDate.compareTo(b.eventDate);
     });
 
   return ranked.take(5).toList(growable: false);

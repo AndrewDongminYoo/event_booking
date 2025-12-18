@@ -71,7 +71,7 @@ class HomePage extends ConsumerWidget {
     final notifier = ref.read(bookingsProvider.notifier);
     final success = notifier.reserve(event);
     final updated = ref.read(eventRepositoryProvider).byId(event.id) ?? event;
-    final seatsLeft = max(updated.seatsLeft, 0);
+    final seatsLeft = max(updated.availableSeats, 0);
 
     if (success) {
       _showSnack(context, 'Reservation confirmed. $seatsLeft seats left.');

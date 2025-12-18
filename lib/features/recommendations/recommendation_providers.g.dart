@@ -102,4 +102,4 @@ final class RecommendationsProvider extends $FunctionalProvider<List<Event>, Lis
   }
 }
 
-String _$recommendationsHash() => r'085aa0d5487b03dce427d1a9aab71f05454c3955';
+String _$recommendationsHash() => r'29e66253e20b08c3928a042870a563b73ff57a8e';

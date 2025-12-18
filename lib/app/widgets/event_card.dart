@@ -47,14 +47,11 @@ class EventCard extends StatelessWidget {
               child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  if (event.imageUrl != null)
-                    Image.network(
-                      event.imageUrl!,
-                      fit: BoxFit.cover,
-                      errorBuilder: (_, _, _) => Container(color: Colors.grey.shade300),
-                    )
-                  else
-                    Container(color: Colors.grey.shade300),
+                  Image.network(
+                    event.imageUrl,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, _, _) => Container(color: Colors.grey.shade300),
+                  ),
                   Positioned(
                     top: 12,
                     left: 12,
@@ -88,7 +85,7 @@ class EventCard extends StatelessWidget {
                       const SizedBox(width: 4),
                       Expanded(
                         child: Text(
-                          formatter.format(event.dateTime),
+                          formatter.format(event.eventDate),
                           style: theme.textTheme.bodySmall?.copyWith(color: Colors.black54),
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -146,7 +143,7 @@ class SeatBadge extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         child: Text(
-          isSoldOut ? 'Sold Out' : '${event.seatsLeft} seats left',
+          isSoldOut ? 'Sold Out' : '${event.availableSeats} seats left',
           style: theme.textTheme.labelMedium?.copyWith(
             color: fg,
             fontWeight: FontWeight.w700,

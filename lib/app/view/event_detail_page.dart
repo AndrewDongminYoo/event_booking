@@ -69,14 +69,12 @@ class _EventDetailPageState extends ConsumerState<EventDetailPage> {
               children: [
                 AspectRatio(
                   aspectRatio: 16 / 9,
-                  child: event.imageUrl == null
-                      ? Container(color: Colors.grey.shade300)
-                      : Image.network(
-                          event.imageUrl!,
-                          width: double.infinity,
-                          fit: BoxFit.cover,
-                          errorBuilder: (_, _, _) => Container(color: Colors.grey.shade300),
-                        ),
+                  child: Image.network(
+                    event.imageUrl,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, _, _) => Container(color: Colors.grey.shade300),
+                  ),
                 ),
                 Positioned(
                   top: 16,
@@ -104,7 +102,7 @@ class _EventDetailPageState extends ConsumerState<EventDetailPage> {
                     children: [
                       const Icon(Icons.event, size: 20),
                       const SizedBox(width: 8),
-                      Text(formatter.format(event.dateTime)),
+                      Text(formatter.format(event.eventDate)),
                     ],
                   ),
                   const SizedBox(height: 8),
@@ -128,7 +126,7 @@ class _EventDetailPageState extends ConsumerState<EventDetailPage> {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    'Seats left: ${event.seatsLeft}',
+                    'Seats left: ${event.availableSeats}',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 24),
@@ -151,7 +149,7 @@ class _EventDetailPageState extends ConsumerState<EventDetailPage> {
   void _attemptReserve(Event event) {
     final success = ref.read(bookingsProvider.notifier).reserve(event);
     final updated = ref.read(eventRepositoryProvider).byId(event.id) ?? event;
-    final seatsLeft = max(updated.seatsLeft, 0);
+    final seatsLeft = max(updated.availableSeats, 0);
 
     if (success) {
       _showSnack('Reservation confirmed. $seatsLeft seats left.');

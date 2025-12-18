@@ -35,8 +35,8 @@ class EventRepository {
 
           final matchesArtist = artist == null || artist.isEmpty || event.artist.toLowerCase() == artist.toLowerCase();
 
-          final matchesFrom = from == null || !event.dateTime.isBefore(from);
-          final matchesTo = to == null || !event.dateTime.isAfter(to);
+          final matchesFrom = from == null || !event.eventDate.isBefore(from);
+          final matchesTo = to == null || !event.eventDate.isAfter(to);
 
           return matchesQuery && matchesArtist && matchesFrom && matchesTo;
         })

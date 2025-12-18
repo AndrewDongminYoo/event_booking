@@ -211,4 +211,4 @@ final class EventWithBookingStatusProvider
   }
 }
 
-String _$eventWithBookingStatusHash() => r'a1c139394e19df8fee2658102e967e3dc3cc4aba';
+String _$eventWithBookingStatusHash() => r'0a5c3a54929f0ce447bf0168e0729d55d2af5727';
