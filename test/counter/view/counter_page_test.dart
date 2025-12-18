@@ -1,5 +1,5 @@
 // Ignore for testing purposes
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, depend_on_referenced_packages
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:event_booking/counter/counter.dart';
