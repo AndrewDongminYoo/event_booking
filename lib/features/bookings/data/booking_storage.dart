@@ -27,10 +27,7 @@ class SharedPreferencesBookingStorage implements BookingStorage {
         .map((item) {
           try {
             final decoded = jsonDecode(item) as Map<String, dynamic>;
-            return Booking(
-              eventId: BigInt.parse(decoded['eventId'] as String),
-              bookedAt: DateTime.fromMillisecondsSinceEpoch(decoded['bookedAt'] as int),
-            );
+            return Booking.fromJson(decoded);
           } catch (_) {
             return null;
           }
@@ -46,7 +43,7 @@ class SharedPreferencesBookingStorage implements BookingStorage {
           (b) => jsonEncode(
             {
               'eventId': b.eventId.toString(),
-              'bookedAt': b.bookedAt.millisecondsSinceEpoch,
+              'bookedAt': b.bookingDate.millisecondsSinceEpoch,
             },
           ),
         )

@@ -19,7 +19,7 @@ class BookingRepository {
     if (_bookings.containsKey(event.id)) return false;
     _bookings[event.id] = Booking(
       eventId: event.id,
-      bookedAt: DateTime.now(),
+      bookingDate: DateTime.now(),
     );
     return true;
   }
@@ -28,5 +28,5 @@ class BookingRepository {
 
   bool isBooked(BigInt eventId) => _bookings.containsKey(eventId);
 
-  static int _byMostRecent(Booking a, Booking b) => b.bookedAt.compareTo(a.bookedAt);
+  static int _byMostRecent(Booking a, Booking b) => b.bookingDate.compareTo(a.bookingDate);
 }

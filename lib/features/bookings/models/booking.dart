@@ -1,15 +1,16 @@
-// Booking entity representing a user's reservation for an event.
-
 // 📦 Package imports:
-import 'package:meta/meta.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-@immutable
-class Booking {
-  const Booking({
-    required this.eventId,
-    required this.bookedAt,
-  });
+part 'booking.freezed.dart';
+part 'booking.g.dart';
 
-  final BigInt eventId;
-  final DateTime bookedAt;
+@freezed
+// Booking entity representing a user's reservation for an event.
+abstract class Booking with _$Booking {
+  @JsonSerializable(fieldRename: FieldRename.snake)
+  const factory Booking({
+    required BigInt eventId,
+    required DateTime bookingDate,
+  }) = _Booking;
+  factory Booking.fromJson(Map<String, dynamic> json) => _$BookingFromJson(json);
 }

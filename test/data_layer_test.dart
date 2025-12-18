@@ -46,14 +46,14 @@ void main() {
 
   test('recommendations favor recently viewed artist', () {
     final events = container.read(eventsProvider);
-    final lumi = events.firstWhere((e) => e.artist == 'Lumi');
+    final twice = events.firstWhere((e) => e.artist == 'TWICE');
 
-    container.read(viewedEventsProvider.notifier).trackView(lumi.id);
+    container.read(viewedEventsProvider.notifier).trackView(twice.id);
 
     final recommended = container.read(recommendationsProvider);
 
     expect(recommended, isNotEmpty);
-    expect(recommended.first.artist, lumi.artist);
+    expect(recommended.first.artist, twice.artist);
   });
 
   test('reservation fails when seats are sold out', () {
