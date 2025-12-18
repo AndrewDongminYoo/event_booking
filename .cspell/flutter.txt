@@ -27,6 +27,8 @@ CFLAGS
 COCOAPODS
 COINIT
 CONOUT
+contador
+Contador
 CREATESTRUCT
 cupertino
 cygpath
@@ -62,6 +64,7 @@ FONTCHANGE
 gapless
 gcno
 getenv
+Gocheok
 gradlew
 GWLP
 HIDPI
@@ -80,11 +83,14 @@ Instantitation
 Intelli
 IPHONEOS
 iphonesimulator
+Jamsil
 JAVACMD
 JTTV
 jvmargs
+KSPO
 libc
 LLDB
+lldbinit
 localizable
 lotties
 LPARAM
@@ -96,6 +102,7 @@ MACCATALYST
 MAKEINTRESOURCE
 markdownlint
 miniaturizable
+mostrado
 mpeltonen
 MSGSEND
 msys
@@ -115,6 +122,7 @@ ORGANIZATIONNAME
 OURCYGPATTERN
 OVERLAPPEDWINDOW
 overscroll
+página
 parallelizable
 pbxproj
 pbxuser
@@ -124,6 +132,8 @@ podfile
 podhelper
 podspec
 potenti
+prefs
+Prefs
 Pressable
 PRODUCTVERSION
 Proguard
@@ -154,6 +164,7 @@ Tappable
 TARG
 Testables
 TEXTINCLUDE
+Texto
 trunkio
 unfocus
 unhide
@@ -163,7 +174,9 @@ VERSIONINFO
 verygoodcore
 vivaxy
 VREDRAW
+watchos
 Wconditional
+webp
 WHENINUSE
 wholemodule
 Windowz

@@ -103,7 +103,8 @@ final seedEvents = <Event>[
     tags: ['K-Pop', 'Boy Band', 'Dance', 'Hip-Hop'],
     venue: 'Gocheok Sky Dome',
     eventDate: DateTime(2026, 06, 10, 19),
-    imageUrl: 'https://www.makestar.com/_vercel/image?url=https:%2F%2Fmystarroom-public-cdn.makestar.com%2Fpublic%2Fimage%2Fproduct%2FP_9843_STRAY_KIDS_9_Banner_Sub.jpg_2025-10-23_123200187021_thumb.jpeg&w=1536&q=80',
+    imageUrl:
+        'https://www.makestar.com/_vercel/image?url=https:%2F%2Fmystarroom-public-cdn.makestar.com%2Fpublic%2Fimage%2Fproduct%2FP_9843_STRAY_KIDS_9_Banner_Sub.jpg_2025-10-23_123200187021_thumb.jpeg&w=1536&q=80',
     ticketPrice: 100_000,
     totalSeats: 25000,
     bookedSeats: 23412,
