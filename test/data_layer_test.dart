@@ -38,8 +38,7 @@ void main() {
   });
 
   test('search filters events by query', () {
-    container.read(searchQueryProvider.notifier).state = 'Seoul';
-    final filtered = container.read(filteredEventsProvider);
+    final filtered = container.read(filteredEventsProvider(query: 'Seoul'));
 
     expect(filtered, isNotEmpty);
     expect(filtered.every((e) => e.venue.contains('Seoul')), isTrue);

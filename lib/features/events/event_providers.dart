@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 
 // 📦 Package imports:
-import 'package:flutter_riverpod/legacy.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 // 🌎 Project imports:
@@ -22,17 +21,14 @@ List<Event> events(Ref ref) {
   return ref.watch(eventRepositoryProvider).events;
 }
 
-final searchQueryProvider = StateProvider<String?>((ref) => null);
-final artistFilterProvider = StateProvider<String?>((ref) => null);
-final dateRangeFilterProvider = StateProvider<DateTimeRange?>((ref) => null);
-
 @Riverpod(keepAlive: true)
-List<Event> filteredEvents(Ref ref) {
+List<Event> filteredEvents(
+  Ref ref, {
+  String? query,
+  String? artist,
+  DateTimeRange? range,
+}) {
   final repo = ref.watch(eventRepositoryProvider);
-  final query = ref.watch(searchQueryProvider);
-  final artist = ref.watch(artistFilterProvider);
-  final range = ref.watch(dateRangeFilterProvider);
-
   return repo.search(
     query: query,
     artist: artist,
@@ -41,11 +37,11 @@ List<Event> filteredEvents(Ref ref) {
   );
 }
 
-@Riverpod(keepAlive: true)
+@riverpod
 // Convenience provider to expose booked status with events.
 Map<Event, bool> eventWithBookingStatus(Ref ref) {
-  final events = ref.watch(filteredEventsProvider);
-  final bookings = ref.watch(bookingsProvider);
+  final events = ref.read(eventRepositoryProvider).events;
+  final bookings = ref.read(bookingsProvider);
   final bookedIds = bookings.map((b) => b.eventId).toSet();
   return {for (final e in events) e: bookedIds.contains(e.id)};
 }

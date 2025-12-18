@@ -88,23 +88,30 @@ final class EventsProvider extends $FunctionalProvider<List<Event>, List<Event>,
 String _$eventsHash() => r'bd7cb311ca61d2da5ea7d5b8b58de3989ea9e1d0';
 
 @ProviderFor(filteredEvents)
-const filteredEventsProvider = FilteredEventsProvider._();
+const filteredEventsProvider = FilteredEventsFamily._();
 
 final class FilteredEventsProvider extends $FunctionalProvider<List<Event>, List<Event>, List<Event>>
     with $Provider<List<Event>> {
-  const FilteredEventsProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'filteredEventsProvider',
-        isAutoDispose: false,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
+  const FilteredEventsProvider._({
+    required FilteredEventsFamily super.from,
+    required ({String? query, String? artist, DateTimeRange<DateTime>? range}) super.argument,
+  }) : super(
+         retry: null,
+         name: r'filteredEventsProvider',
+         isAutoDispose: false,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$filteredEventsHash();
+
+  @override
+  String toString() {
+    return r'filteredEventsProvider'
+        ''
+        '$argument';
+  }
 
   @$internal
   @override
@@ -112,7 +119,13 @@ final class FilteredEventsProvider extends $FunctionalProvider<List<Event>, List
 
   @override
   List<Event> create(Ref ref) {
-    return filteredEvents(ref);
+    final argument = this.argument as ({String? query, String? artist, DateTimeRange<DateTime>? range});
+    return filteredEvents(
+      ref,
+      query: argument.query,
+      artist: argument.artist,
+      range: argument.range,
+    );
   }
 
   /// {@macro riverpod.override_with_value}
@@ -122,9 +135,43 @@ final class FilteredEventsProvider extends $FunctionalProvider<List<Event>, List
       providerOverride: $SyncValueProvider<List<Event>>(value),
     );
   }
+
+  @override
+  bool operator ==(Object other) {
+    return other is FilteredEventsProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
 }
 
-String _$filteredEventsHash() => r'7964f060d95e52e666df8e37b20cbb80bd8182e3';
+String _$filteredEventsHash() => r'1c3272490d933b819fd286b5481cd2902dea100c';
+
+final class FilteredEventsFamily extends $Family
+    with $FunctionalFamilyOverride<List<Event>, ({String? query, String? artist, DateTimeRange<DateTime>? range})> {
+  const FilteredEventsFamily._()
+    : super(
+        retry: null,
+        name: r'filteredEventsProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: false,
+      );
+
+  FilteredEventsProvider call({
+    String? query,
+    String? artist,
+    DateTimeRange<DateTime>? range,
+  }) => FilteredEventsProvider._(
+    argument: (query: query, artist: artist, range: range),
+    from: this,
+  );
+
+  @override
+  String toString() => r'filteredEventsProvider';
+}
 
 @ProviderFor(eventWithBookingStatus)
 const eventWithBookingStatusProvider = EventWithBookingStatusProvider._();
@@ -138,7 +185,7 @@ final class EventWithBookingStatusProvider
         argument: null,
         retry: null,
         name: r'eventWithBookingStatusProvider',
-        isAutoDispose: false,
+        isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -164,4 +211,4 @@ final class EventWithBookingStatusProvider
   }
 }
 
-String _$eventWithBookingStatusHash() => r'3e3243a45827e51c4b4bf6ad7a5d8d159fa7e414';
+String _$eventWithBookingStatusHash() => r'a1c139394e19df8fee2658102e967e3dc3cc4aba';
