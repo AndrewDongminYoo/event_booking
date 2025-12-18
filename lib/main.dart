@@ -58,7 +58,7 @@ Future<void> main() async {
   FlutterError.onError = (details) {
     log(details.exceptionAsString(), stackTrace: details.stack);
   };
-
+  WidgetsFlutterBinding.ensureInitialized();
   final preferences = await SharedPreferences.getInstance();
 
   runApp(
