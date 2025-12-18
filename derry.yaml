@@ -1,0 +1,182 @@
+# --- Development workflow ---------------------------------------------------
+dev:
+  (description): Runs the Flutter application with hot reload enabled, ignoring deprecation warnings.
+  (scripts): flutter run --debug --flavor development --hot --ignore-deprecation
+
+# --- Quality gates ----------------------------------------------------------
+pretest:
+  (description): Clean Existing Coverage reports
+  (scripts): rm -rf coverage
+
+test:
+  (description): Runs all tests in the Flutter project with coverage enabled.
+  (scripts):
+    - flutter test --coverage --concurrency=4 --test-randomize-ordering-seed=random --dart-define="FLUTTER_TEST=true"
+
+posttest:
+  (description): Generates a coverage report from the test coverage data.
+  (scripts):
+    - lcov --quiet --remove coverage/lcov.info "**/*.*.dart" -o coverage/lcov_filtered.info
+    - genhtml coverage/lcov_filtered.info -o coverage/ --quiet
+
+# --- Maintenance scripts ----------------------------------------------------
+reinstall:
+  (description): Cleans and reinstalls the Flutter project by removing old builds, regenerate boiler-plate codes
+  (scripts):
+    - flutter clean
+    - flutter packages get
+    - $bootstrap
+
+bootstrap:
+  (description): Initializes the project by generating necessary code, sorting imports, applying fixes, and formatting.
+  (scripts):
+    - $generate
+    - $format
+
+generate:
+  (description): Runs code generation builders and sorts imports to set up project files.
+  (scripts):
+    - dart run build_runner build --delete-conflicting-outputs
+
+format:
+  (description): Applies automated fixes, sorts imports, and formats the codebase to ensure consistent code quality.
+  (scripts):
+    - dart fix --apply
+    - dart format --line-length 120 .
+    - dart run import_sorter:main -e
+
+hard:
+  (description): Forces an upgrade of Flutter and its packages to their latest versions and updates CocoaPods
+  (scripts):
+    - flutter upgrade --force
+    - flutter packages upgrade --major-versions --tighten
+    - (cd ios && pod update)
+
+generate-note:
+  simplest:
+    (description): Save the last commit message as a text file
+    (scripts):
+      - |
+        mkdir -p build/logs/.tmp
+        if [[ ${DRY_RUN:-0} == "1" ]]; then
+          echo "[dry-run] would generate release notes"
+        else
+          git log -1 --pretty=%B >build/logs/.tmp/release-notes.txt
+        fi
+
+  summarize:
+    (description): Compare commits and save titles of new commits, then trim length
+    (scripts):
+      - |
+        set -e
+        mkdir -p build/logs/.tmp
+
+        if [[ ${DRY_RUN:-0} == "1" ]]; then
+          echo "[dry-run] would generate release notes"
+          exit 0
+        fi
+
+        git fetch origin --quiet
+        BASE="$(git symbolic-ref --quiet --short refs/remotes/origin/HEAD 2>/dev/null | sed 's|^origin/||')"
+
+        git log "origin/${BASE:-main}..HEAD" \
+          --pretty=format:"%s" \
+          --no-merges \
+          >build/logs/.tmp/commits.raw.txt
+
+        python3 scripts/format_release_notes.py \
+          build/logs/.tmp/commits.raw.txt \
+          build/logs/.tmp/release-notes.txt
+
+# --- Build artifacts --------------------------------------------------------
+build:
+  aab:
+    (description): 🚨 Builds a production Android App Bundle and uploads it to Google Play internal track.
+    (scripts):
+      - >
+        scripts/run_with_logs.sh build-aos --
+        flutter build appbundle --flavor production --release
+        --tree-shake-icons
+        --build-number $(TZ='Asia/Seoul' date +'%y%m%d%H')
+        --dart-define=GIT_SHA=$(git rev-parse HEAD)
+        --verbose
+
+  ipa:
+    (description): 🚨 Builds an iOS archive bundle Release-production mode
+    (scripts):
+      - >
+        scripts/run_with_logs.sh build-ios --
+        flutter build ipa --flavor production --release
+        --tree-shake-icons
+        --build-number $(TZ='Asia/Seoul' date +'%y%m%d%H')
+        --dart-define=GIT_SHA=$(git rev-parse HEAD)
+        --verbose
+
+  apk:
+    (description): ⚠️ Builds a staging Android APK and distributes it via Firebase App Distribution.
+    (scripts):
+      - >
+        scripts/run_with_logs.sh build-aos-stg --
+        flutter build apk --flavor staging --release
+        --tree-shake-icons
+        --build-number $(TZ='Asia/Seoul' date +'%y%m%d%H')
+        --dart-define=GIT_SHA=$(git rev-parse HEAD)
+        --verbose
+
+  ipa-stg:
+    (description): ⚠️ Builds an iOS archive bundle Release-staging mode
+    (scripts):
+      - >
+        scripts/run_with_logs.sh build-ios-stg --
+        flutter build ipa --flavor staging --release
+        --tree-shake-icons
+        --build-number $(TZ='Asia/Seoul' date +'%y%m%d%H')
+        --dart-define=GIT_SHA=$(git rev-parse HEAD)
+        --verbose
+
+# --- Log utilities ----------------------------------------------------------
+logs:
+  clean:
+    (description): Removes generated build logs and recreates the directory scaffold.
+    (scripts):
+      - rm -rf build/logs
+      - mkdir -p build/logs/{success,failure,latest}
+      - mkdir -p build/logs/.tmp
+
+  latest:
+    (description): Lists the most recent log symlinks for quick inspection.
+    (scripts):
+      - mkdir -p build/logs/latest
+      - ls -al build/logs/latest
+
+  latest-error:
+    (description): Tails stderr of the most recent failed logged command.
+    (scripts):
+      - |
+        LAST=$(ls -d build/logs/failure/* 2>/dev/null | sort | tail -n 1)
+        if [[ -n $LAST ]]; then
+          echo "Tailing $LAST/stderr.log"
+          tail -n 80 "$LAST/stderr.log"
+        else
+          echo "No failure logs found."
+        fi
+
+# --- Versioning ------------------------------------------------------
+version:
+  bump:
+    (description): Bump pubspec.yaml version based on package.json.
+    (scripts): node scripts/versioning/bump-cli.js
+
+# --- Store tools -----------------------------------------------------
+store:
+  build-map:
+    (description): Generate JSON mapping between App Store builds and Git commits.
+    (scripts): node scripts/store/build-map-cli.js
+
+  fetch-aos-notes:
+    (description): Fetch Android release notes from Google Play into markdown files.
+    (scripts): node scripts/store/fetch-aos-release-notes-cli.js
+
+  fetch-ios-notes:
+    (description): Fetch iOS release notes from App Store into markdown files.
+    (scripts): node scripts/store/fetch-ios-release-notes-cli.js

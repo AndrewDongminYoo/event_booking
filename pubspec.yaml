@@ -33,3 +33,7 @@ dev_dependencies:
 flutter:
   generate: true
   uses-material-design: true
+
+# https://github.com/frencojobs/derry
+# `dart pub global activate derry`
+scripts: derry.yaml
