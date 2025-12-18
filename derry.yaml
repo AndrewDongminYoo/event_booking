@@ -51,6 +51,7 @@ hard:
     - flutter upgrade --force
     - flutter packages upgrade --major-versions --tighten
     - (cd ios && pod update)
+    - (cd macos && pod update)
 
 generate-note:
   simplest:
