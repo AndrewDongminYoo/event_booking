@@ -45,23 +45,23 @@ flutter:
     - family: Pretendard
       # https://cactus.tistory.com/306
       fonts:
-        - asset: assets/fonts/design/Pretendard-Thin.ttf
+        - asset: assets/fonts/Pretendard-Thin.ttf
           weight: 100
-        - asset: assets/fonts/design/Pretendard-ExtraLight.ttf
+        - asset: assets/fonts/Pretendard-ExtraLight.ttf
           weight: 200
-        - asset: assets/fonts/design/Pretendard-Light.ttf
+        - asset: assets/fonts/Pretendard-Light.ttf
           weight: 300
-        - asset: assets/fonts/design/Pretendard-Regular.ttf
+        - asset: assets/fonts/Pretendard-Regular.ttf
           weight: 400
-        - asset: assets/fonts/design/Pretendard-Medium.ttf
+        - asset: assets/fonts/Pretendard-Medium.ttf
           weight: 500
-        - asset: assets/fonts/design/Pretendard-SemiBold.ttf
+        - asset: assets/fonts/Pretendard-SemiBold.ttf
           weight: 600
-        - asset: assets/fonts/design/Pretendard-Bold.ttf
+        - asset: assets/fonts/Pretendard-Bold.ttf
           weight: 700
-        - asset: assets/fonts/design/Pretendard-ExtraBold.ttf
+        - asset: assets/fonts/Pretendard-ExtraBold.ttf
           weight: 800
-        - asset: assets/fonts/design/Pretendard-Black.ttf
+        - asset: assets/fonts/Pretendard-Black.ttf
           weight: 900
 
 # https://pub.dev/packages/flutter_gen_runner
